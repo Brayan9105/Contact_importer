@@ -11,7 +11,7 @@ RSpec.describe Book, type: :model do
   describe 'associations' do
     it { should belong_to(:user) }
     it { should have_many(:contacts) }
-    it { should have_many(:invalid_Contacts)}
+    it { should have_many(:invalid_contacts)}
   end
 
   describe 'validations' do

@@ -8,4 +8,11 @@ class Book < ApplicationRecord
   has_one_attached :file
 
   validates :file, presence: true
+  validate :csv_format
+
+  def csv_format
+    if file.attached? && !file.content_type.in?(['text/cvs'])
+      errors.add(:file, 'Must be a CSV file')
+    end
+  end
 end

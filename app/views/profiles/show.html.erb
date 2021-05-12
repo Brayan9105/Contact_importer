@@ -1,0 +1,19 @@
+<%= @user.email %>
+<% if @books %>
+  <table>
+    <thead>
+      <th>Filename</th>
+      <th>Status</th>
+    </thead>
+    <tbody>
+      <% @books.each do |book| %>
+      <tr>
+        <td><%= link_to book.filename, profile_book_path(book) %><td>
+        <td><%= book.status %></td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% else %>
+  You are not upload contact book yet
+<% end %>

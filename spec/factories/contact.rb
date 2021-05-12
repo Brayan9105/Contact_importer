@@ -5,7 +5,7 @@ FactoryBot.define do
     credit_card { '371449635398431' }
     franchise { 'American Express' }
     sequence(:email) { |n| "test#{}@mail.com" }
+    book { create(:book, :valid_file) }
     user
-    book
   end
 end

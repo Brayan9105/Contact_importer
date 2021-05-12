@@ -1,0 +1,40 @@
+<% if @book.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@book.errors.count, "error") %> prohibited this book from being saved:</h2>
+
+    <ul>
+      <% @book.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with model: @book do |f| %>
+  <%= f.label :file %>
+  <%= f.file_field :file, required: true %>
+
+  <h3>Specify the order of the columns in the file</h3>
+  <%= f.label :name %>
+  <%= f.number_field :column_name %>
+
+  <%= f.label :date_of_birth %>
+  <%= f.number_field :column_dob %>
+
+  <%= f.label :phone %>
+  <%= f.number_field :column_phone %>
+
+  <%= f.label :address %>
+  <%= f.number_field :column_address %>
+
+  <%= f.label :credit_card %>
+  <%= f.number_field :column_credit_card %>
+
+  <%= f.label :franchise %>
+  <%= f.number_field :column_franchise %>
+
+  <%= f.label :email %>
+  <%= f.number_field :column_email %>
+
+  <%= f.submit 'Upload Book' %>
+<% end %>

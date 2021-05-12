@@ -13,5 +13,28 @@
 <%= form_with model: @book do |f| %>
   <%= f.label :file %>
   <%= f.file_field :file, required: true %>
+
+  <h3>Specify the order of the columns in the file</h3>
+  <%= f.label :name %>
+  <%= f.number_field :column_name %>
+
+  <%= f.label :date_of_birth %>
+  <%= f.number_field :column_dob %>
+
+  <%= f.label :phone %>
+  <%= f.number_field :column_phone %>
+
+  <%= f.label :address %>
+  <%= f.number_field :column_address %>
+
+  <%= f.label :credit_card %>
+  <%= f.number_field :column_credit_card %>
+
+  <%= f.label :franchise %>
+  <%= f.number_field :column_franchise %>
+
+  <%= f.label :email %>
+  <%= f.number_field :column_email %>
+
   <%= f.submit 'Upload Book' %>
 <% end %>

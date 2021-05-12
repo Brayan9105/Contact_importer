@@ -15,6 +15,7 @@ class BooksController < ApplicationController
   private
 
   def book_params
-    params.require(:book).permit(:file)
+    params.require(:book).permit(:file, :column_name, :column_dob, :column_phone,
+      :column_address, :column_credit_card, :column_franchise, :column_email)
   end
 end

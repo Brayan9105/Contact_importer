@@ -22,6 +22,37 @@ RSpec.describe Book, type: :model do
 
   describe 'validations' do
     it { should validate_presence_of(:file) }
+    it { should validate_presence_of(:column_name) }
+    it { should validate_presence_of(:column_dob) }
+    it { should validate_presence_of(:column_phone) }
+    it { should validate_presence_of(:column_address) }
+    it { should validate_presence_of(:column_credit_card) }
+    it { should validate_presence_of(:column_franchise) }
+    it { should validate_presence_of(:column_email) }
+
+    it { should validate_inclusion_of(:column_name).in_range(1..7) }
+    it { should validate_inclusion_of(:column_dob).in_range(1..7) }
+    it { should validate_inclusion_of(:column_phone).in_range(1..7) }
+    it { should validate_inclusion_of(:column_address).in_range(1..7) }
+    it { should validate_inclusion_of(:column_credit_card).in_range(1..7) }
+    it { should validate_inclusion_of(:column_franchise).in_range(1..7) }
+    it { should validate_inclusion_of(:column_email).in_range(1..7) }
+
+    context 'diferent_index' do
+      context 'when all index are different' do
+        let(:valid_book){ build(:book, :valid_file) }
+        it 'return nil' do
+          expect(valid_book.different_index).to be_nil
+        end
+      end
+
+      context 'when some index are equal' do
+        let(:invalid_book){ build(:book, :valid_file, column_dob: 1) }
+        it 'return a validation error' do
+          expect(invalid_book.different_index).not_to be_nil
+        end
+      end
+    end
 
     context 'csv_format' do
       context 'when is a csv file' do

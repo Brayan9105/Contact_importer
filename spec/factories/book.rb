@@ -1,6 +1,13 @@
 FactoryBot.define do
   factory :book do
     filename { 'csv_file.csv' }
+    column_name { 1 }
+    column_dob { 2 }
+    column_phone { 3 }
+    column_address { 4 }
+    column_credit_card { 5 }
+    column_franchise { 6 }
+    column_email { 7 }
     user
   end
 

@@ -10,8 +10,14 @@ class Book < ApplicationRecord
   validates :file, presence: true
   validate :csv_format
 
+  after_create :set_filename
+
+  def set_filename
+    self.update(filename: self.file.blob.filename)
+  end
+
   def csv_format
-    if file.attached? && !file.content_type.in?(['text/cvs'])
+    if file.attached? && !file.content_type.in?(['text/csv'])
       errors.add(:file, 'Must be a CSV file')
     end
   end

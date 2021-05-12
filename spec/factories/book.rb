@@ -1,8 +1,19 @@
 FactoryBot.define do
   factory :book do
-    file { Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "csv_file.csv"), 'text/csv') }
     filename { 'csv_file.csv' }
     user
+  end
+
+  trait :valid_file do
+    file { Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "csv_file.csv"), 'text/csv') }
+  end
+
+  trait :invalid_file do
+    file { Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "pdf_file.pdf"), 'text/pdf') }
+  end
+
+  trait :without_filename do
+    filename { "" }
   end
 
   trait :on_hold do

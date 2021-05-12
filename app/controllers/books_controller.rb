@@ -6,8 +6,7 @@ class BooksController < ApplicationController
   def create
     @book = current_user.books.build(book_params)
     if @book.save
-      # pending set route
-      # redirecto_to
+      redirect_to profile_book_path(@book)
     else
       render :new, alert: 'Some erros avoid to create the resource'
     end

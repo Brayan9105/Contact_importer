@@ -75,7 +75,7 @@ RSpec.describe Book, type: :model do
     context 'after_create' do
       context 'set_filename' do
         let(:book){ build(:book, :valid_file, :without_filename) }
-        it 'takes set filename with the name of the file uploaded' do
+        it 'set filename with the name of the file uploaded' do
           expect{ book.save }.to change(book, :filename).from("").to("csv_file.csv")
         end
       end

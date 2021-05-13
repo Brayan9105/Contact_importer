@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :contact do
+    name { Faker::Artist.name }
     telephone { '(+57) 320 432 05 09' }
     address { Faker::Address.street_address }
     credit_card { '371449635398431' }

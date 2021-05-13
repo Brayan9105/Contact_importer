@@ -13,7 +13,7 @@ class BooksController < ApplicationController
   end
 
   def import_contacts
-    ImportContactJob.perform_later(params[:book_id])
+    ImportContactJob.perform_later(params[:book_id], current_user)
 
     respond_to do |format|
       format.js
@@ -24,6 +24,6 @@ class BooksController < ApplicationController
 
   def book_params
     params.require(:book).permit(:file, :column_name, :column_dob, :column_phone,
-      :column_address, :column_credit_card, :column_franchise, :column_email)
+      :column_address, :column_credit_card, :column_email)
   end
 end

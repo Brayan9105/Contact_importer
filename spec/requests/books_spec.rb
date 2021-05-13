@@ -28,8 +28,7 @@ RSpec.describe "Books", type: :request do
           column_phone: 3,
           column_address: 4,
           column_credit_card: 5,
-          column_franchise: 6,
-          column_email: 7
+          column_email: 6
         }
       }
     end

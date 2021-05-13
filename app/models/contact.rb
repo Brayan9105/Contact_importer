@@ -3,5 +3,5 @@ class Contact < ApplicationRecord
   belongs_to :book
 
   validates :telephone, :address, :credit_card,
-            :franchise, :email, presence: true
+            :email, presence: true
 end

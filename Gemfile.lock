@@ -72,6 +72,7 @@ GEM
     concurrent-ruby (1.1.8)
     connection_pool (2.2.5)
     crass (1.0.6)
+    csv (3.1.2)
     database_cleaner (2.0.1)
       database_cleaner-active_record (~> 2.0.0)
     database_cleaner-active_record (2.0.1)
@@ -248,6 +249,7 @@ DEPENDENCIES
   annotate
   bootsnap (>= 1.4.4)
   byebug
+  csv
   database_cleaner
   devise (~> 4.8)
   factory_bot_rails (~> 4.0)

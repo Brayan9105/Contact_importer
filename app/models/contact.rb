@@ -34,4 +34,8 @@ class Contact < ApplicationRecord
       self.errors.add(:telephone, 'Cant be blank')
     end
   end
+
+  def valid_address
+    self.errors.add(:address, 'Cant be blank') unless address.present?
+  end
 end

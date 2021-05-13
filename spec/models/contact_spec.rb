@@ -87,10 +87,30 @@ RSpec.describe Contact, type: :model do
         it 'returns a validation error' do
           expect(invalid_contact.valid_phone).not_to be_nil
         end
+
+        it 'returns a validation error' do
+          invalid_contact.telephone = ''
+          expect(invalid_contact.valid_phone).not_to be_nil
+        end
       end
     end
 
     describe 'valid_address' do
+      context 'when field is present' do
+        let(:contact){ build(:contact) }
+
+        it 'returns nil' do
+          expect(contact.valid_address).to be_nil
+        end
+      end
+
+      context 'when field is not present' do
+        let(:invalid_contact){ build(:contact, address: '' ) }
+
+        it 'return a validation error' do
+          expect(invalid_contact.valid_address).not_to be_nil
+        end
+      end
     end
 
     describe 'valid_credit_card' do

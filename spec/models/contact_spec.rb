@@ -40,6 +40,31 @@ RSpec.describe Contact, type: :model do
     end
 
     describe 'valid_dob' do
+      context 'when field format is correct' do
+        let(:contact1){ build(:contact, dob: "20210513") }
+        let(:contact2){ build(:contact, dob: "2021-05-13") }
+
+        it 'returns nil' do
+          expect(contact1.valid_date).to be true
+        end
+
+        it 'returns nil' do
+          expect(contact2.valid_date).to be true
+        end
+      end
+
+      context 'when field format is not correct' do
+        let(:invalid_contact){ build(:contact, dob: "2021/05/13") }
+
+        it 'returns nil' do
+          expect(invalid_contact.valid_date).not_to be_nil
+        end
+
+        it 'returns nil' do
+          invalid_contact.dob = ''
+          expect(invalid_contact.valid_date).not_to be_nil
+        end
+      end
     end
 
     describe 'valid_phone' do

@@ -12,6 +12,14 @@ class BooksController < ApplicationController
     end
   end
 
+  def import_contacts
+    ImportContactJob.perform_later(params[:book_id])
+
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
 
   def book_params

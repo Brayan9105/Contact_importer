@@ -56,11 +56,11 @@ RSpec.describe Contact, type: :model do
       context 'when field format is not correct' do
         let(:invalid_contact){ build(:contact, dob: "2021/05/13") }
 
-        it 'returns nil' do
+        it 'returns a validation error' do
           expect(invalid_contact.valid_date).not_to be_nil
         end
 
-        it 'returns nil' do
+        it 'returns a validation error' do
           invalid_contact.dob = ''
           expect(invalid_contact.valid_date).not_to be_nil
         end
@@ -68,6 +68,26 @@ RSpec.describe Contact, type: :model do
     end
 
     describe 'valid_phone' do
+      context 'when field format is valid' do
+        let(:contact1){ build(:contact, telephone: "(+00) 000 000 00 00") }
+        let(:contact2){ build(:contact, telephone: "(+00) 000-000-00-00") }
+
+        it 'returns nil' do
+          expect(contact1.valid_phone).to be_nil
+        end
+
+        it 'returns nil' do
+          expect(contact2.valid_phone).to be_nil
+        end
+      end
+
+      context 'when field format is not valid' do
+        let(:invalid_contact){ build(:contact, telephone: "(+00) 0000000000") }
+
+        it 'returns a validation error' do
+          expect(invalid_contact.valid_phone).not_to be_nil
+        end
+      end
     end
 
     describe 'valid_address' do

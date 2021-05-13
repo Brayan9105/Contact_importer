@@ -117,6 +117,28 @@ RSpec.describe Contact, type: :model do
     end
 
     describe 'valid_email' do
+      context 'when field is present' do
+        context 'and the fortmat is correct' do
+          let(:contact){ build(:contact) }
+          it 'return nil' do
+            expect(contact.valid_email).to be_nil
+          end
+        end
+
+        context 'and the fortmat is not correct' do
+          let(:invalid_contact){ build(:contact, email: 'email@something' ) }
+          it 'return a validation error' do
+            expect(invalid_contact.valid_email).not_to be_nil
+          end
+        end
+      end
+
+      context 'when field is not present' do
+        let(:invalid_contact){ build(:contact, email: '' ) }
+        it 'return a validation error' do
+          expect(invalid_contact.valid_email).not_to be_nil
+        end
+      end
     end
   end
 end

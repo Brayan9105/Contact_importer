@@ -38,4 +38,18 @@ class Contact < ApplicationRecord
   def valid_address
     self.errors.add(:address, 'Cant be blank') unless address.present?
   end
+
+  def valid_email
+    if self.email.present?
+      regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+      if self.email.match(regex)
+        current_user = User.find(self.user_id)
+        self.errors.add(:email, 'another valid contact has this email') if current_user.contacts.find_by(email: email)
+      else
+        self.errors.add(:email, 'bad format field')
+      end
+    else
+      self.errors.add(:dob, 'Cant be blank')
+    end
+  end
 end

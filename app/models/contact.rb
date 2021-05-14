@@ -5,6 +5,23 @@ class Contact < ApplicationRecord
   validates :telephone, :address, :credit_card,
             :email, presence: true
 
+  validate :valid_name
+  validate :valid_date
+  validate :valid_phone
+  validate :valid_address
+  validate :valid_email
+  validate :valid_credit_card
+
+  after_create :set_franchise
+
+  def set_franchise
+    franchise = CreditCardDetector::Detector.new(self.credit_card)
+    self.update(franchise: franchise.brand_name,
+                card_digits: self.credit_card.slice(0...4),
+                credit_card: BCrypt::Password.create(self.credit_card)
+    )
+  end
+
   def valid_name
     if self.name.present?
       self.errors.add(:name, 'bad format field') if self.name.match(/[!$%^&*()_+|~=`{}\[\]:";'<>?,.Ç¨\|@#¢∞¬÷“”≠´\\]/)
@@ -50,6 +67,14 @@ class Contact < ApplicationRecord
       end
     else
       self.errors.add(:dob, 'Cant be blank')
+    end
+  end
+
+  def valid_credit_card
+    if self.credit_card.present?
+      self.errors.add(:credit_card, 'bad format field') unless CreditCardDetector::Detector.new(self.credit_card).brand
+    else
+      self.errors.add(:credit_card, 'Cant be blank')
     end
   end
 end

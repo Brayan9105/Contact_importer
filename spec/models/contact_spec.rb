@@ -114,6 +114,74 @@ RSpec.describe Contact, type: :model do
     end
 
     describe 'valid_credit_card' do
+      describe 'when field is present' do
+        describe 'and credit card number is valid' do
+          let(:contact){ build(:contact, credit_card: card) }
+
+          context 'and franchise is American Express' do
+            let(:card){ '371449635398431' }
+
+            it 'return nil' do
+              expect(contact.valid_credit_card).to be_nil
+            end
+          end
+
+          context 'and franchise is Diners Club' do
+            let(:card){ '30569309025904' }
+
+            it 'return nil' do
+              expect(contact.valid_credit_card).to be_nil
+            end
+          end
+
+          context 'and franchise is Discover' do
+            let(:card){ '6011111111111117' }
+
+            it 'return nil' do
+              expect(contact.valid_credit_card).to be_nil
+            end
+          end
+          context 'and franchise is JCB' do
+            let(:card){ '3530111333300000' }
+
+            it 'return nil' do
+              expect(contact.valid_credit_card).to be_nil
+            end
+          end
+
+          context 'and franchise is MasterCard' do
+            let(:card){ '5555555555554444' }
+
+            it 'return nil' do
+              expect(contact.valid_credit_card).to be_nil
+            end
+          end
+
+          context 'and franchise is Visa' do
+            let(:card){ '4111111111111111' }
+
+            it 'return nil' do
+              expect(contact.valid_credit_card).to be_nil
+            end
+          end
+        end
+
+        describe 'and credit card number is no valid' do
+          let(:invalid_contact){ build(:contact, credit_card: '123456789123456') }
+
+          it 'return a validation error' do
+            expect(invalid_contact.valid_credit_card).not_to be_nil
+          end
+        end
+      end
+
+      describe 'when field is not present' do
+        let(:invalid_contact){ build(:contact, credit_card: '') }
+
+        it 'returns a validation error' do
+          expect(invalid_contact.valid_credit_card).not_to be_nil
+        end
+      end
     end
 
     describe 'valid_email' do

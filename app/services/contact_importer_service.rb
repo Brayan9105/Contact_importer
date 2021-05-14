@@ -1,7 +1,12 @@
 class ContactImporterService < Struct.new(:book, :user)
   def import
+    i = 0
     indexes = set_indexes(book)
     CSV.foreach(file) do |row|
+      if i.zero?
+        i += 1
+        next
+      end
       contact = set_contact(row, indexes)
       invalid_contact = set_invalid_contact(row, indexes)
 
@@ -59,31 +64,10 @@ class ContactImporterService < Struct.new(:book, :user)
       telephone: row[indexes[:phone]],
       address: row[indexes[:address]],
       credit_card: row[indexes[:credit_card]],
+      card_digits: 'unknow',
+      franchise: 'unknow',
       email: row[indexes[:email]],
       user_id: user.id
     )
   end
-
-  # def processing_file(params)
-  #   fields = ['name', 'date', 'phone', 'address', 'franchise', 'email']
-  #   valid_contact = 0
-  #
-  #   file = ActiveStorage::Blob.service.path_for(self.file.key)
-  #   CSV.foreach(file, headers: true) do |row|
-  #     $contact = { errors: [], name: '', date: '', phone: '', address: '', credit_card: '', franchise: '', email: '', user_id: self[:user_id] }
-  #     if row.size != 6
-  #       add_format_error('size')
-  #       create_contact($contact)
-  #       break
-  #     end
-  #
-  #     fields.each do |field|
-  #         send("valid_#{field}", row[params["#{field}".to_sym].to_i])
-  #     end
-  #
-  #     valid_contact += 1 if $contact[:errors].size == 0
-  #     create_contact($contact)
-  #   end
-  #   valid_contact > 0 ? self.terminado! : self.fallido!
-  # end
 end

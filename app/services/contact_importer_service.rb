@@ -1,14 +1,9 @@
 class ContactImporterService < Struct.new(:book, :user)
   def import
-    i = 0
+    book.processing!
     indexes = set_indexes(book)
-    CSV.foreach(file) do |row|
-      if i.zero?
-        i += 1
-        next
-      end
-      contact = set_contact(row, indexes)
-      invalid_contact = set_invalid_contact(row, indexes)
+    CSV.foreach(file, col_sep: ',', return_headers: false) do |row|
+      contact, invalid_contact = set_contact(row, indexes), set_invalid_contact(row, indexes)
 
       unless valid_number_of_columns(row)
         invalid_contact.error_msg = 'Some fields from the contact are missing'
@@ -20,8 +15,8 @@ class ContactImporterService < Struct.new(:book, :user)
         invalid_contact.error_msg = contact.errors.full_messages.join(', ')
         invalid_contact.save
       end
-
     end
+    book.invalid_contacts.count.positive? ? book.failed! : book.terminated!
   end
 
   private

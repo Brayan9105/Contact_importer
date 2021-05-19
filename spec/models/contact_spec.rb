@@ -5,51 +5,44 @@ RSpec.describe Contact, type: :model do
     it { expect(build(:contact)).to be_valid }
   end
 
+  describe 'methods' do
+    describe 'credit_card_format' do
+      let!(:contact){ create(:contact, franchise: '') }
+
+      it 'returns franchise name' do
+        expect(contact.franchise).to eq('American Express')
+      end
+
+      it 'returns the 4 first numbers' do
+        expect(contact.card_digits).to eq('3714')
+      end
+    end
+  end
+
   describe 'associations' do
     it { should belong_to(:user) }
     it { should belong_to(:book) }
   end
 
   describe 'validations' do
+    it { should validate_presence_of(:name) }
     it { should validate_presence_of(:telephone) }
-    it { should validate_presence_of(:address) }
-    it { should validate_presence_of(:credit_card) }
     it { should validate_presence_of(:email) }
+    it { should validate_presence_of(:address) }
+    it { should validate_presence_of(:dob) }
+    it { should validate_presence_of(:credit_card) }
 
-    describe 'valid_name' do
-      context 'when field format is correct' do
-        let(:contact){ build(:contact) }
-
-        it 'returns nil' do
-          expect(contact.valid_name).to be_nil
-        end
-      end
-
-      context 'when field format is not correct' do
-        let(:invalid_contact){ build(:contact, name: '@pedro') }
-
-        it 'returns a validation error' do
-          expect(invalid_contact.valid_name).not_to be_nil
-        end
-
-        it 'returns a validation error' do
-          invalid_contact.name = ''
-          expect(invalid_contact.valid_name).not_to be_nil
-        end
-      end
-    end
-
-    describe 'valid_dob' do
+    describe 'date_is_iso8601' do
       context 'when field format is correct' do
         let(:contact1){ build(:contact, dob: "20210513") }
         let(:contact2){ build(:contact, dob: "2021-05-13") }
 
         it 'returns nil' do
-          expect(contact1.valid_date).to be true
+          expect(contact1.date_is_iso8601).to be true
         end
 
         it 'returns nil' do
-          expect(contact2.valid_date).to be true
+          expect(contact2.date_is_iso8601).to be true
         end
       end
 
@@ -57,154 +50,68 @@ RSpec.describe Contact, type: :model do
         let(:invalid_contact){ build(:contact, dob: "2021/05/13") }
 
         it 'returns a validation error' do
-          expect(invalid_contact.valid_date).not_to be_nil
-        end
-
-        it 'returns a validation error' do
-          invalid_contact.dob = ''
-          expect(invalid_contact.valid_date).not_to be_nil
+          expect(invalid_contact.date_is_iso8601).not_to be_nil
         end
       end
     end
 
-    describe 'valid_phone' do
-      context 'when field format is valid' do
-        let(:contact1){ build(:contact, telephone: "(+00) 000 000 00 00") }
-        let(:contact2){ build(:contact, telephone: "(+00) 000-000-00-00") }
+    describe 'credit_card_format' do
+      describe 'credit card number is valid' do
+        let(:contact){ build(:contact, credit_card: card) }
 
-        it 'returns nil' do
-          expect(contact1.valid_phone).to be_nil
-        end
+        context 'and franchise is American Express' do
+          let(:card){ '371449635398431' }
 
-        it 'returns nil' do
-          expect(contact2.valid_phone).to be_nil
-        end
-      end
-
-      context 'when field format is not valid' do
-        let(:invalid_contact){ build(:contact, telephone: "(+00) 0000000000") }
-
-        it 'returns a validation error' do
-          expect(invalid_contact.valid_phone).not_to be_nil
-        end
-
-        it 'returns a validation error' do
-          invalid_contact.telephone = ''
-          expect(invalid_contact.valid_phone).not_to be_nil
-        end
-      end
-    end
-
-    describe 'valid_address' do
-      context 'when field is present' do
-        let(:contact){ build(:contact) }
-
-        it 'returns nil' do
-          expect(contact.valid_address).to be_nil
-        end
-      end
-
-      context 'when field is not present' do
-        let(:invalid_contact){ build(:contact, address: '' ) }
-
-        it 'return a validation error' do
-          expect(invalid_contact.valid_address).not_to be_nil
-        end
-      end
-    end
-
-    describe 'valid_credit_card' do
-      describe 'when field is present' do
-        describe 'and credit card number is valid' do
-          let(:contact){ build(:contact, credit_card: card) }
-
-          context 'and franchise is American Express' do
-            let(:card){ '371449635398431' }
-
-            it 'return nil' do
-              expect(contact.valid_credit_card).to be_nil
-            end
-          end
-
-          context 'and franchise is Diners Club' do
-            let(:card){ '30569309025904' }
-
-            it 'return nil' do
-              expect(contact.valid_credit_card).to be_nil
-            end
-          end
-
-          context 'and franchise is Discover' do
-            let(:card){ '6011111111111117' }
-
-            it 'return nil' do
-              expect(contact.valid_credit_card).to be_nil
-            end
-          end
-          context 'and franchise is JCB' do
-            let(:card){ '3530111333300000' }
-
-            it 'return nil' do
-              expect(contact.valid_credit_card).to be_nil
-            end
-          end
-
-          context 'and franchise is MasterCard' do
-            let(:card){ '5555555555554444' }
-
-            it 'return nil' do
-              expect(contact.valid_credit_card).to be_nil
-            end
-          end
-
-          context 'and franchise is Visa' do
-            let(:card){ '4111111111111111' }
-
-            it 'return nil' do
-              expect(contact.valid_credit_card).to be_nil
-            end
-          end
-        end
-
-        describe 'and credit card number is no valid' do
-          let(:invalid_contact){ build(:contact, credit_card: '123456789123456') }
-
-          it 'return a validation error' do
-            expect(invalid_contact.valid_credit_card).not_to be_nil
-          end
-        end
-      end
-
-      describe 'when field is not present' do
-        let(:invalid_contact){ build(:contact, credit_card: '') }
-
-        it 'returns a validation error' do
-          expect(invalid_contact.valid_credit_card).not_to be_nil
-        end
-      end
-    end
-
-    describe 'valid_email' do
-      context 'when field is present' do
-        context 'and the fortmat is correct' do
-          let(:contact){ build(:contact) }
           it 'return nil' do
-            expect(contact.valid_email).to be_nil
+            expect(contact.credit_card_format).to be_nil
           end
         end
 
-        context 'and the fortmat is not correct' do
-          let(:invalid_contact){ build(:contact, email: 'email@something' ) }
-          it 'return a validation error' do
-            expect(invalid_contact.valid_email).not_to be_nil
+        context 'and franchise is Diners Club' do
+          let(:card){ '30569309025904' }
+
+          it 'return nil' do
+            expect(contact.credit_card_format).to be_nil
+          end
+        end
+
+        context 'and franchise is Discover' do
+          let(:card){ '6011111111111117' }
+
+          it 'return nil' do
+            expect(contact.credit_card_format).to be_nil
+          end
+        end
+        context 'and franchise is JCB' do
+          let(:card){ '3530111333300000' }
+
+          it 'return nil' do
+            expect(contact.credit_card_format).to be_nil
+          end
+        end
+
+        context 'and franchise is MasterCard' do
+          let(:card){ '5555555555554444' }
+
+          it 'return nil' do
+            expect(contact.credit_card_format).to be_nil
+          end
+        end
+
+        context 'and franchise is Visa' do
+          let(:card){ '4111111111111111' }
+
+          it 'return nil' do
+            expect(contact.credit_card_format).to be_nil
           end
         end
       end
 
-      context 'when field is not present' do
-        let(:invalid_contact){ build(:contact, email: '' ) }
+      describe 'credit card number is no valid' do
+        let(:invalid_contact){ build(:contact, credit_card: '123456789123456') }
+
         it 'return a validation error' do
-          expect(invalid_contact.valid_email).not_to be_nil
+          expect(invalid_contact.credit_card_format).not_to be_nil
         end
       end
     end

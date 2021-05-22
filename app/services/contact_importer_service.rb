@@ -2,7 +2,7 @@ class ContactImporterService < Struct.new(:book, :user)
   def import
     book.processing!
     indexes = set_indexes(book)
-    CSV.foreach(file, col_sep: ',', return_headers: false) do |row|
+    CSV.foreach(file, col_sep: ';', headers: true) do |row|
       contact, invalid_contact = set_contact(row, indexes), set_invalid_contact(row, indexes)
 
       unless valid_number_of_columns(row)

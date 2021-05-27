@@ -1,6 +1,10 @@
 module ResquestSpecHelper
   include Warden::Test::Helpers
 
+  def response_body
+    JSON.parse(response.body)
+  end
+
   def self.include(base)
     base.before(:each) { Warden.test_mode! }
     base.after(:each) { Warden.test_reset! }

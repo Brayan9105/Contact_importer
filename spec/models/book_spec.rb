@@ -27,16 +27,14 @@ RSpec.describe Book, type: :model do
     it { should validate_presence_of(:column_phone) }
     it { should validate_presence_of(:column_address) }
     it { should validate_presence_of(:column_credit_card) }
-    it { should validate_presence_of(:column_franchise) }
     it { should validate_presence_of(:column_email) }
 
-    it { should validate_inclusion_of(:column_name).in_range(1..7) }
-    it { should validate_inclusion_of(:column_dob).in_range(1..7) }
-    it { should validate_inclusion_of(:column_phone).in_range(1..7) }
-    it { should validate_inclusion_of(:column_address).in_range(1..7) }
-    it { should validate_inclusion_of(:column_credit_card).in_range(1..7) }
-    it { should validate_inclusion_of(:column_franchise).in_range(1..7) }
-    it { should validate_inclusion_of(:column_email).in_range(1..7) }
+    it { should validate_inclusion_of(:column_name).in_range(1..6) }
+    it { should validate_inclusion_of(:column_dob).in_range(1..6) }
+    it { should validate_inclusion_of(:column_phone).in_range(1..6) }
+    it { should validate_inclusion_of(:column_address).in_range(1..6) }
+    it { should validate_inclusion_of(:column_credit_card).in_range(1..6) }
+    it { should validate_inclusion_of(:column_email).in_range(1..6) }
 
     context 'diferent_index' do
       context 'when all index are different' do
@@ -76,7 +74,7 @@ RSpec.describe Book, type: :model do
       context 'set_filename' do
         let(:book){ build(:book, :valid_file, :without_filename) }
         it 'set filename with the name of the file uploaded' do
-          expect{ book.save }.to change(book, :filename).from("").to("csv_file.csv")
+          expect{ book.save }.to change(book, :filename).from("").to("valid_contacts.csv")
         end
       end
     end

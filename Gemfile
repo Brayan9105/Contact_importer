@@ -59,3 +59,8 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'simplecov', require: false, group: :test
 gem 'sidekiq', '~> 6.2', '>= 6.2.1'
 gem 'devise', '~> 4.8'
+gem 'csv'
+gem 'credit_card_detector'
+gem 'active_model_serializers'
+gem 'rack-cors'
+gem 'jwt'

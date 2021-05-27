@@ -1,1 +1,10 @@
 <%= @book.filename %>
+<p id='status'><%= @book.status %></p>
+
+<% if @book.on_hold? %>
+  <div id="form_import">
+    <%= form_with url: "/books/#{@book.id}/contacts/import", method: :post, local: false do |f| %>
+      <%= f.submit :import_contacts %>
+    <% end %>
+  </div>
+<% end %>

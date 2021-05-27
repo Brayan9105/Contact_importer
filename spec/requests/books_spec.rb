@@ -28,8 +28,7 @@ RSpec.describe "Books", type: :request do
           column_phone: 3,
           column_address: 4,
           column_credit_card: 5,
-          column_franchise: 6,
-          column_email: 7
+          column_email: 6
         }
       }
     end
@@ -59,6 +58,18 @@ RSpec.describe "Books", type: :request do
         subject
         expect(response).to render_template(:new)
       end
+    end
+  end
+
+  describe 'POST /books/:id/contacts/import' do
+    ActiveJob::Base.queue_adapter = :test
+
+    let(:book){ create(:book, :valid_file) }
+    subject{ post "/books/#{book.id}/contacts/import", xhr: true }
+
+    it 'returns a js' do
+      subject
+      expect(response.content_type).to eq('text/javascript; charset=utf-8')
     end
   end
 end

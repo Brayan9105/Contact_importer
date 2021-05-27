@@ -19,7 +19,7 @@ class ContactImporterService < Struct.new(:book, :user)
       contact.save
     end
 
-    book.invalid_contacts.count.positive? ? book.on_hold! : book.terminated!
+    book.invalid_contacts.count.positive? ? book.failed! : book.terminated!
     book.status
   end
 
@@ -51,19 +51,20 @@ class ContactImporterService < Struct.new(:book, :user)
   end
 
   def set_contact(row, indexes)
-    book.contacts.build(
+    Contact.new(
       name: row[indexes[:name]],
       dob: row[indexes[:dob]],
       telephone: row[indexes[:phone]],
       address: row[indexes[:address]],
       credit_card: row[indexes[:credit_card]],
       email: row[indexes[:email]],
-      user_id: user.id
+      user_id: user.id,
+      book_id: book.id
     )
   end
 
   def set_invalid_contact(row, indexes)
-    book.invalid_contacts.build(
+    InvalidContact.new(
       name: row[indexes[:name]],
       dob: row[indexes[:dob]],
       telephone: row[indexes[:phone]],
@@ -72,7 +73,8 @@ class ContactImporterService < Struct.new(:book, :user)
       card_digits: 'unknow',
       franchise: 'unknow',
       email: row[indexes[:email]],
-      user_id: user.id
+      user_id: user.id,
+      book_id: book.id
     )
   end
 end

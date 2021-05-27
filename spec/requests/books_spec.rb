@@ -60,4 +60,16 @@ RSpec.describe "Books", type: :request do
       end
     end
   end
+
+  describe 'POST /books/:id/contacts/import' do
+    ActiveJob::Base.queue_adapter = :test
+
+    let(:book){ create(:book, :valid_file) }
+    subject{ post "/books/#{book.id}/contacts/import", xhr: true }
+
+    it 'returns a js' do
+      subject
+      expect(response.content_type).to eq('text/javascript; charset=utf-8')
+    end
+  end
 end

@@ -10,14 +10,13 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      mount_devise_token_auth_for 'User', at: 'auth',
-                                  controller: { sessions: 'api/v1/sessions' }
+      post '/authenticate', to: 'authentication#create'
+
       resources :books, only: [:create] do
         post '/contacts/import', to: 'books#import_contacts'
       end
-      resources :profiles, only: [:show] do
-        resources :books, only: [:show], controller: 'profiles/books'
-      end
+      get 'profile', to: 'profiles#show'
+      get 'profile/book/:id', to: 'profile/books#show'
     end
   end
 end

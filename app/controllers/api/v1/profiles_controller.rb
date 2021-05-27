@@ -1,8 +1,10 @@
 module Api
   module V1
     class ProfilesController < ApiController
+      before_action :authenticate_user
+
       def show
-        render_collection(Book.all, root: 'books', serializer: Api::V1::Books::IndexSerializer)
+        render_collection(books, root: 'books', serializer: Api::V1::Books::IndexSerializer)
       end
 
       private

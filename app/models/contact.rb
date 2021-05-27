@@ -1,4 +1,8 @@
+require 'bcrypt'
+
 class Contact < ApplicationRecord
+  include BCrypt
+
   belongs_to :user
   belongs_to :book
 
@@ -31,9 +35,8 @@ class Contact < ApplicationRecord
 
   def set_franchise
     franchise = CreditCardDetector::Detector.new(self.credit_card)
-    self.update(franchise: franchise.brand_name,
-                card_digits: self.credit_card.slice(0...4),
-                credit_card: BCrypt::Password.create(self.credit_card)
-    )
+    self.update_attribute(:franchise, franchise.brand_name)
+    self.update_attribute(:card_digits, self.credit_card.slice(0...4))
+    self.update_attribute(:credit_card, BCrypt::Password.create(self.credit_card))
   end
 end

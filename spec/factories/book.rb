@@ -11,11 +11,19 @@ FactoryBot.define do
   end
 
   trait :valid_file do
-    file { Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "csv_file.csv"), 'text/csv') }
+    file { Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "valid_contacts.csv"), 'text/csv') }
+  end
+
+  trait :failed_book do
+    file { Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "failed_book.csv"), 'text/csv') }
   end
 
   trait :invalid_file do
     file { Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "pdf_file.pdf"), 'text/pdf') }
+  end
+
+  trait :invalid_book do
+    file { Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "invalid_book.csv"), 'text/csv') }
   end
 
   trait :without_filename do

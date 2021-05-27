@@ -3,9 +3,8 @@
 module Api
   module V1
     class ApiController < ApplicationController
-      include DeviseTokenAuth::Concerns::SetUserByToken
-
-      # before_action :authenticate_user!
+      include ActionController::HttpAuthentication::Token
+      skip_before_action :verify_authenticity_token
 
       respond_to :json
 
@@ -13,6 +12,18 @@ module Api
       rescue_from StandardError, with: :handle_error
 
       private
+
+      def authenticate_user
+        token, _options = token_and_options(request)
+        user_id = AuthenticationTokenService.decode(token)
+        @current = User.find(user_id)
+      rescue ActiveRecord::RecordNotFound
+        render status: :unauthorized
+      end
+
+      def current_user
+        @user ||= @current
+      end
 
       def render_collection(scope, root:, serializer:)
         render json: scope,

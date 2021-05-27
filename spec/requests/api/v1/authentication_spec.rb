@@ -11,7 +11,7 @@ describe 'Authentication', type: :request do
       expect(AuthenticationTokenService.decode(response_body['token'])).to eq(user.id)
     end
 
-    it 'returns error when email is missing' do
+    xit 'returns error when email is missing' do
       post '/api/v1/authenticate', params: { password: user.password }
 
       expect(response).to have_http_status(:unprocessable_entity)
@@ -20,7 +20,7 @@ describe 'Authentication', type: :request do
       })
     end
 
-    it 'returns error when password is missing' do
+    xit 'returns error when password is missing' do
       post '/api/v1/authenticate', params: { email: 'test@mail.com' }
 
       expect(response).to have_http_status(:unprocessable_entity)
